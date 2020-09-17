@@ -35,8 +35,11 @@ public class Issue implements Comparable<Issue> {
     }
 
     /**
-     * See {@link com.ripple.core.fields.Field#TakerGetsCurrency}
-     * See {@link com.ripple.core.fields.Field#TakerGetsIssuer}
+     * See {@link com.savl.ripple.core.fields.Field#TakerGetsCurrency}
+     * See {@link com.savl.ripple.core.fields.Field#TakerGetsIssuer}
+     * @param currency currency hash
+     * @param issuer an issuer hash
+     * @return an issue
      *
      * TODO: better handling of Taker(Gets|Pays)(Issuer|Curency)
      *       maybe special subclasses of AccountID / Currency

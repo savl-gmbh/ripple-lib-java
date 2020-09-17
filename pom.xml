@@ -5,6 +5,34 @@
     <artifactId>ripple-lib-java</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
+    <name>ripple-lib-java</name>
+    <description>Ripple(XRP) java library</description>
+    <url>https://github.com/savl-gmbh/ripple-lib-java</url>
+    <licenses>
+        <license>
+            <name>ISC license</name>
+            <url>https://opensource.org/licenses/ISC</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Viktor Sidochenko</name>
+            <email>viktor.sidochenko@gmail.com</email>
+            <organization>Savl GmbH</organization>
+            <organizationUrl>http://github.com/savl-gmbh</organizationUrl>
+        </developer>
+        <developer>
+            <name>Konstantin Maltsev</name>
+            <email>mkypers@gmail.com</email>
+            <organization>Savl GmbH</organization>
+            <organizationUrl>http://github.com/savl-gmbh</organizationUrl>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:git://github.com/savl-gmbh/ripple-lib-java</connection>
+        <developerConnection>scm:git@github.com:savl-gmbh/ripple-lib-java.git</developerConnection>
+        <url>https://github.com/savl-gmbh/ripple-lib-java/tree/master</url>
+    </scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -100,7 +128,19 @@
                             </execution>
                         </executions>
                     </plugin>
-
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <!-- GPG plugin -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>

@@ -19,9 +19,7 @@ import java.math.RoundingMode;
  * In ripple, amounts are either XRP, the native currency, or an IOU of
  * a given currency as issued by a designated account.
  */
-public class Amount extends Number implements SerializedType, Comparable<Amount>
-
-{
+public class Amount extends Number implements SerializedType, Comparable<Amount> {
 
     private static BigDecimal TAKER_PAYS_FOR_THAT_DAMN_OFFER = new BigDecimal("1000000000000.000100");
 //    public static final Amount NEUTRAL_ZERO = new Amount(Currency.NEUTRAL, AccountID.NEUTRAL);
@@ -244,6 +242,7 @@ public class Amount extends Number implements SerializedType, Comparable<Amount>
     private boolean equalValue(Amount amt) {
         return compareTo(amt) == 0;
     }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Amount) {
@@ -262,7 +261,6 @@ public class Amount extends Number implements SerializedType, Comparable<Amount>
         return equalValue(amt) &&
                 currencyString().equals(amt.currencyString());
     }
-
 
 
     public int compareTo(Amount amount) {
@@ -284,25 +282,6 @@ public class Amount extends Number implements SerializedType, Comparable<Amount>
         return value.signum() == 1;
     }
 
-    /**
-
-    Arithmetic Operations
-
-    There's no checking if an amount is of a different currency/issuer.
-    
-    All operations return amounts of the same currency/issuer as the
-    first operand.
-
-    eg.
-
-        amountOne.add(amountTwo)
-
-        The currency/issuer of the resultant amount, is that of `amountOne`
-    
-    Divide and multiply are equivalent to the javascript ripple-lib
-    ratio_human and product_human.
-
-    */
     public Amount add(BigDecimal augend) {
         return newValue(value.add(augend), true);
     }
@@ -358,9 +337,11 @@ public class Amount extends Number implements SerializedType, Comparable<Amount>
     public Amount abs() {
         return newValue(value.abs());
     }
+
     public Amount min(Amount val) {
         return (compareTo(val) <= 0 ? this : val);
     }
+
     public Amount max(Amount val) {
         return (compareTo(val) >= 0 ? this : val);
     }
@@ -369,6 +350,7 @@ public class Amount extends Number implements SerializedType, Comparable<Amount>
     public BigDecimal computeQuality(Amount toExchangeThisWith) {
         return value.divide(toExchangeThisWith.value, MathContext.DECIMAL128);
     }
+
     /**
      * @return Amount
      * The real native unit is a drop, one million of which are an XRP.
@@ -500,6 +482,7 @@ public class Amount extends Number implements SerializedType, Comparable<Amount>
             return new Amount(new BigDecimal(valueString), currencyString, issuerString);
         }
     }
+
     static public Translator translate = new Translator();
 
     public static BigDecimal xrpFromDropsMantissa(byte[] mantissa, int sign) {
@@ -634,8 +617,8 @@ public class Amount extends Number implements SerializedType, Comparable<Amount>
     public void checkLowerDropBound(BigDecimal val) {
         if (val.scale() > 6) {
             PrecisionError bigger = getOutOfBoundsError(val,
-                                    "smaller than min native value",
-                                    MIN_NATIVE_VALUE);
+                    "smaller than min native value",
+                    MIN_NATIVE_VALUE);
             bigger.illegal = this;
             throw bigger;
         }
@@ -644,8 +627,8 @@ public class Amount extends Number implements SerializedType, Comparable<Amount>
     public void checkUpperBound(BigDecimal val) {
         if (val.compareTo(MAX_NATIVE_VALUE) == 1) {
             PrecisionError bigger = getOutOfBoundsError(val,
-                                    "bigger than max native value ",
-                                    MAX_NATIVE_VALUE);
+                    "bigger than max native value ",
+                    MAX_NATIVE_VALUE);
             bigger.illegal = this;
             throw bigger;
         }
@@ -686,7 +669,7 @@ public class Amount extends Number implements SerializedType, Comparable<Amount>
     public static BigDecimal roundValue(BigDecimal value, boolean nativeSrc) {
         int i = value.precision() - value.scale();
         return value.setScale(nativeSrc ? MAXIMUM_NATIVE_SCALE :
-                MAXIMUM_IOU_PRECISION - i,
+                        MAXIMUM_IOU_PRECISION - i,
                 MATH_CONTEXT.getRoundingMode());
     }
 
