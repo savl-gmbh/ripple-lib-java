@@ -13,6 +13,8 @@ binary-transactions.json
 ripple-bouncycastle/target/
 .settings/
 .project
+*/.classpath
+*/target
 target/
 *.json
 ripple-examples/ripple-cli/src/main/java/com/ripple/cli/MakePayment2.java

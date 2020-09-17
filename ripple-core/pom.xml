@@ -4,11 +4,11 @@
     xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.ripple</groupId>
+        <groupId>com.savl.ripple</groupId>
         <artifactId>ripple-lib-java</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <groupId>com.ripple</groupId>
+    <groupId>com.savl.ripple</groupId>
     <artifactId>ripple-core</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>ripple-core</name>
@@ -18,9 +18,9 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>com.ripple</groupId>
-            <artifactId>ripple-bouncycastle</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+            <version>1.60</version>
         </dependency>
         <dependency>
             <groupId>org.json</groupId>

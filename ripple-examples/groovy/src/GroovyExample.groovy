@@ -1,15 +1,15 @@
-import com.ripple.client.Client
-import com.ripple.client.blobvault.BlobVault
-import com.ripple.client.transactions.TransactionManager
-import com.ripple.client.transport.impl.JavaWebSocketTransportImpl
-import com.ripple.core.types.known.tx.txns.Payment
+import com.savl.ripple.client.Client
+import com.savl.ripple.client.blobvault.BlobVault
+import com.savl.ripple.client.transactions.TransactionManager
+import com.savl.ripple.client.transport.impl.JavaWebSocketTransportImpl
+import com.savl.ripple.core.types.known.tx.txns.Payment
 import org.json.JSONObject
 
-import static com.ripple.core.coretypes.AccountID.Destination
+import static com.savl.ripple.core.coretypes.AccountID.Destination
 
 // Events
 // Fields
-import static com.ripple.core.coretypes.Amount.Amount
+import static com.savl.ripple.core.coretypes.Amount.Amount
 
 // run the main ;)
 main()

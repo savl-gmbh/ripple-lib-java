@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package com.ripple.android;
+package com.savl.ripple.android;
 
 public final class R {
     public static final class attr {
