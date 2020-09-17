@@ -5,10 +5,14 @@ import com.savl.ripple.encodings.B58IdentiferCodecs;
 import com.savl.ripple.encodings.base58.B58;
 import com.savl.ripple.utils.Sha512;
 import com.savl.ripple.utils.Utils;
+import org.bouncycastle.crypto.digests.SHA512Digest;
+import org.bouncycastle.crypto.generators.PKCS5S2ParametersGenerator;
+import org.bouncycastle.crypto.params.KeyParameter;
+import org.bouncycastle.util.Arrays;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
-import java.util.Arrays;
+import java.text.Normalizer;
 
 import static com.savl.ripple.config.Config.getB58IdentiferCodecs;
 
@@ -22,6 +26,7 @@ public class Seed {
     public Seed(byte[] seedBytes) {
         this(VER_K256, seedBytes);
     }
+
     public Seed(byte[] version, byte[] seedBytes) {
         this.seedBytes = seedBytes;
         this.version = version;
@@ -54,14 +59,15 @@ public class Seed {
     }
 
     public IKeyPair keyPair(int account) {
-        if (Arrays.equals(version, VER_ED25519)) {
+        if (Arrays.areEqual(version, VER_ED25519)) {
             if (account != 0) throw new AssertionError();
             return EDKeyPair.from128Seed(seedBytes);
-        }  else {
+        } else {
             return createKeyPair(seedBytes, account);
         }
 
     }
+
     public static Seed fromBase58(String b58) {
         B58.Decoded decoded = Config.getB58().decodeMulti(b58, 16, VER_K256, VER_ED25519);
         return new Seed(decoded.version, decoded.payload);
@@ -81,6 +87,24 @@ public class Seed {
 
     public static IKeyPair createKeyPair(byte[] seedBytes) {
         return createKeyPair(seedBytes, 0);
+    }
+
+    public static IKeyPair createKeyPair(String mnemonic, String passphrase) {
+        return createKeyPair(getEntropy(mnemonic, passphrase));
+    }
+
+    public static String createPrivateKeyFromMnemonic(String mnemonic, String passphrase) {
+        return new Seed(getEntropy(mnemonic, passphrase)).toString();
+    }
+
+    public static byte[] getEntropy(String mnemonic, String passphrase) {
+        String salt = "mnemonic" + Normalizer.normalize(passphrase, Normalizer.Form.NFKD);
+
+        PKCS5S2ParametersGenerator gen = new PKCS5S2ParametersGenerator(new SHA512Digest());
+        gen.init(mnemonic.getBytes(), salt.getBytes(), 2048);
+        byte[] dk = ((KeyParameter) gen.generateDerivedParameters(512)).getKey();
+        byte[] entropy = Arrays.copyOfRange(dk, 0, 16);
+        return entropy;
     }
 
     public static IKeyPair createKeyPair(byte[] seedBytes, int accountNumber) {

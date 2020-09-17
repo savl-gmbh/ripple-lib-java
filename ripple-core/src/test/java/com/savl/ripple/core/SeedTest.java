@@ -1,25 +1,24 @@
 package com.savl.ripple.core;
 
 import com.savl.ripple.config.Config;
+import com.savl.ripple.core.coretypes.AccountID;
 import com.savl.ripple.crypto.ecdsa.EDKeyPair;
 import com.savl.ripple.crypto.ecdsa.IKeyPair;
 import com.savl.ripple.crypto.ecdsa.Seed;
 import com.savl.ripple.encodings.B58IdentiferCodecs;
-import com.savl.ripple.encodings.common.B16;
-import net.i2p.crypto.eddsa.math.FieldElement;
-import net.i2p.crypto.eddsa.math.GroupElement;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import org.junit.Assert;
 import org.junit.Test;
-import org.bouncycastle.util.Arrays;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class SeedTest {
     static {
         Config.initBouncy();
     }
-    private static final String[] ADDRESS_ARRAY = new String[] {
+
+    private static final String[] ADDRESS_ARRAY = new String[]{
             "masterpassphrase", "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh", "0", "0330E7FC9D56BB25D6893BA3F317AE5BCF33B3291BD63DB32654A313222F7FD020",
             "masterpassphrase", "r4bYF7SLUMD7QgSLLpgJx38WJSY12ViRjP", "1", "02CD8C4CE87F86AAD1D9D18B03DE28E6E756F040BD72A9C127862833EB90D60BAD",
             "masterpassphrase", "rLpAd4peHUMBPbVJASMYK5GTBUSwXRD9nx", "2", "0259A57642A6F4AEFC9B8062AF453FDEEEAC5572BA602BB1DBD5EF011394C6F9FC",
@@ -46,8 +45,7 @@ public class SeedTest {
     }
 
     @Test
-    public void testCreateRootKeyPair()
-    {
+    public void testCreateRootKeyPair() {
         B58IdentiferCodecs b58 = Config.getB58IdentiferCodecs();
         Seed seed = Seed.fromPassPhrase("N4");
         IKeyPair rootPair = seed.rootKeyPair();
@@ -70,11 +68,24 @@ public class SeedTest {
 
     @Test
     public void testCreateKeypairFromAccountNumber() {
-        for (int i = 0; i < ADDRESS_ARRAY.length; i=i+ADDRESS_LINE_SIZE) {
-            IKeyPair keyPair = Seed.fromPassPhrase(ADDRESS_ARRAY[i]).keyPair(Integer.valueOf(ADDRESS_ARRAY[i+2]));
-            assertEquals(ADDRESS_ARRAY[i+3], keyPair.canonicalPubHex());
+        for (int i = 0; i < ADDRESS_ARRAY.length; i = i + ADDRESS_LINE_SIZE) {
+            IKeyPair keyPair = Seed.fromPassPhrase(ADDRESS_ARRAY[i]).keyPair(Integer.valueOf(ADDRESS_ARRAY[i + 2]));
+            assertEquals(ADDRESS_ARRAY[i + 3], keyPair.canonicalPubHex());
         }
     }
+
+    @Test
+    public void testKeyPairFromMnemonic() {
+        String mnemonic = "jungle ancient improve candy adult tourist claim devote input brave dinner taxi";
+
+        IKeyPair keyPair = Seed.createKeyPair(mnemonic, "");
+        String address = AccountID.fromKeyPair(keyPair).address;
+        String pk = Seed.createPrivateKeyFromMnemonic(mnemonic, "");
+
+        Assert.assertEquals("rrspt5GTsZmYpka4CcoYvqKH423jGn6ztC", address);
+        Assert.assertEquals("spxB4mx9YCZ9bHynpD1dN55WUPYgi", pk);
+    }
+
     private static String phraseToFamilySeed(String passphrase) {
         return Seed.fromPassPhrase(passphrase).toString();
     }
